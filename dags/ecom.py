@@ -1,5 +1,5 @@
 from airflow.operators.python import PythonOperator
-from airflow import DAG,
+from airflow import DAG
 from airflow.decorators import dag, task
 from datetime import datetime
 
