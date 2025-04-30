@@ -1,6 +1,6 @@
-from airflow.operators.python import PythonOperatos
-from datetime import datetime, timedelta
-from airflow.decorators import dag, task
+from airflow.operators.empty import EmptyOperator
+from pendulum import datetime, duration
+from airflow.decorators import dag
 
 #now we will see the params that i always need to define
 
@@ -16,18 +16,14 @@ from airflow.decorators import dag, task
 
 @dag(start_date=datetime(2025, 1, 1),
      schedule='@daily', #scheduled everyday at midnight
-     catchup=False,
+     catchup=True, #i change catchup to true and still having just one run. This is because i run before a dag and the catchup will catch the last dagrun since today
      description="This DAG process ecommerce data",
-     tags=["team_a", "ecom", "..."],
+     tags=["team_a", "ecom"],
      default_args={"retries": 1},#instead of put in each task the retry argument, for example, u can set default here
-     dagrun_timeout=timedelta(minutes=20),
+     dagrun_timeout=duration(minutes=20),
      max_consecutive_failed_dag_runs=2)
 
 def ecom_params(): #the first one is dag id. Using operator, the id is the name (ecom). As the best practice, use the same name of python file
-    ta = PythonOperator(task_id='ta')
-
-    tb = PythonOperator(task_id='tb')
-
-    tc = PythonOperator(task_id='tc')
+    ta = EmptyOperator(task_id='ta')
 
 ecom_params()
